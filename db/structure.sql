@@ -35,6 +35,39 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: shifts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.shifts (
+    id bigint NOT NULL,
+    start timestamp(6) without time zone NOT NULL,
+    finish timestamp(6) without time zone NOT NULL,
+    user_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: shifts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.shifts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: shifts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.shifts_id_seq OWNED BY public.shifts.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -68,6 +101,13 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
+-- Name: shifts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.shifts ALTER COLUMN id SET DEFAULT nextval('public.shifts_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -91,11 +131,33 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: shifts shifts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.shifts
+    ADD CONSTRAINT shifts_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_shifts_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_shifts_on_user_id ON public.shifts USING btree (user_id);
+
+
+--
+-- Name: index_shifts_on_user_id_and_start_and_finish; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_shifts_on_user_id_and_start_and_finish ON public.shifts USING btree (user_id, start, finish);
 
 
 --
@@ -106,12 +168,21 @@ CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
 
 
 --
+-- Name: shifts fk_rails_b1a30da2b8; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.shifts
+    ADD CONSTRAINT fk_rails_b1a30da2b8 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20230130012441');
+('20230130012441'),
+('20230130014419');
 
 
