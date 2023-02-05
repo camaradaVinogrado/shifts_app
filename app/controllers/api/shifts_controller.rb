@@ -10,6 +10,15 @@ class Api::ShiftsController < ApplicationController
     render json: { status: :unprocessable_entity, message: e }
   end
 
+  def index
+    render json: user.shifts
+  end
+
+  def destroy_multiple
+    user.shifts.where(id: params[:shifts_ids]).destroy_all
+    render json: { status: :ok, message: 'Shifts have been deleted' }
+  end
+
   private
 
   def create_params
