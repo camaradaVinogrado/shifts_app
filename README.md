@@ -1,3 +1,5 @@
+Test assesment - basic shifts assignements for employees.
+
 ## Assumptions  
   
 - Very basic prototype, almost nothing extra except some constraints  
